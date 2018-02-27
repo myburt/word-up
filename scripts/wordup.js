@@ -113,9 +113,8 @@ function render() {
     // update the score on the scoreboard
     $("#current-score").text(currentScore());
 
-    // TODO 2
     // Update the curent time remaining on the scoreboard.
-
+    $("#time-remaining").text(model.secondsRemaining);
 
     // if the game has not started yet, just hide the #game container and exit
     if (model.gameHasStarted == false) {
@@ -128,6 +127,7 @@ function render() {
     // clear stuff
     $("#allowed-letters").empty();
     $("#word-submissions").empty();
+    $("#textbox").removeClass("bad-attempt");
     // TODO 10
     // Add a few things to the above code block (underneath "// clear stuff").
 
@@ -143,11 +143,8 @@ function render() {
     // Render the word submissions
 
 
-    // Set the value of the textbox
-    $("#textbox").val(model.currentAttempt);
-    // TODO 3
-    // Give focus to the textbox.
-
+    // Set the value of the textbox and Give focus to the textbox.
+    $("#textbox").val(model.currentAttempt).focus();
 
     // if the current word attempt contains disallowed letters,
     var disallowedLetters = disallowedLettersInWord(model.currentAttempt);
@@ -238,10 +235,15 @@ $(document).ready(function() {
         render();
     });
 
-    // TODO 6
     // Add another event handler with a callback function.
     // When the textbox content changes,
     // update the .currentAttempt property of the model and re-render
+    $("#textbox").on("input", function(){
+        //update the model
+        model.currentAttempt = $("#textbox").val();
+        //update the view
+        render();
+    });
 
 
     // when the form is submitted
@@ -277,10 +279,18 @@ var scrabblePointsForEachLetter = {
  * meaning it is not a member of the .allowedLetters list from the current model
  */
 function isDisallowedLetter(letter) {
-    // TODO 7
     // This should return true if the letter is not an element of
     // the .allowedLetters list in the model
-    return false;
+    if(model.allowedLetters.indexOf(letter) == -1)
+    {
+        console.log("true");
+        return true;
+    }
+    else
+    {
+        console.log("false");
+        return false;
+    }
 }
 
 /**
